@@ -53,6 +53,13 @@ export default class SongCard extends React.Component {
         // ASK THE MODEL TO MOVE THE DATA
         this.props.moveCallback(sourceId, targetId);
     }
+    handleDragEnd = (event) => {
+        event.preventDefault();
+        this.setState(prevState => ({
+            isDragging: false,
+            draggedTo: false
+        }));
+    }
 
     getItemNum = () => {
         return this.props.id.substring("song-card-".length);
@@ -62,9 +69,12 @@ export default class SongCard extends React.Component {
         const { song } = this.props;
         let num = this.getItemNum();
         console.log("num: " + num);
-        let itemClass = "song-card";
+        let itemClass = "song-card unselected-song-card";
         if (this.state.draggedTo) {
-            itemClass = "song-card-dragged-to";
+            itemClass = "song-card unselected-song-card song-card-dragged-to";
+        }
+        if (this.state.isDragging) {
+            itemClass = "song-card unselected-song-card is-dragging"
         }
         return (
             <div
@@ -74,10 +84,23 @@ export default class SongCard extends React.Component {
                 onDragOver={this.handleDragOver}
                 onDragEnter={this.handleDragEnter}
                 onDragLeave={this.handleDragLeave}
+                onDragEnd={this.handleDragEnd}
                 onDrop={this.handleDrop}
                 draggable="true"
             >
-                {song.title} by {song.artist}
+                <span id={"song-card-number-" + num}
+                    className="song-card-bulletNum">{num + ". "}</span>
+                <a id={"song-card-link-" + num} 
+                    className="song-card-title" href={"https://www.youtube.com/watch?v=" + song.youTubeId}
+                    target="1">{song.title}</a>
+                <span id={"song-card-yearPublished-" + num} 
+                    className="song-card-year">{" (" + song.year + ")"}</span>
+                <span id={"song-card-byWord-" + num}
+                    className="song-card-by">{" by "}</span>
+                <span id={"song-card-artistName-" + num}
+                    className="song-card-artist">{song.artist}</span>
+                <input type="button" id={"remove-song-" + num}
+                    className="song-card-button" value="✕"/>
             </div>
         )
     }
