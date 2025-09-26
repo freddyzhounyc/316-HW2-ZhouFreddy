@@ -23,7 +23,7 @@ body {
 
 #root {
   background-color: var(--swatch-primary);
-  font-family: 'Tangerine', serif;
+  font-family: 'Bebas Neue', sans-serif;
   position: absolute;
   width: 80%;
   left: 10%;
@@ -273,7 +273,7 @@ input {
 
 .modal-root {
   position: relative;
-  max-width: 1200vw;
+  max-width: 70vw;
   max-height: 600vh;
   overflow: visible;
   display: flex;
