@@ -8,6 +8,7 @@ import { jsTPS } from 'jstps';
 // OUR TRANSACTIONS
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
 import EditSong_Transaction from './transactions/EditSong_Transaction.js';
+import RemoveSong_Transaction from './transactions/RemoveSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.jsx';
@@ -325,6 +326,40 @@ class App extends React.Component {
         });
     }
 
+    createSong = (index, song) => {
+        let newSongs = [...this.state.currentList.songs];
+        newSongs.splice(index, 0, song);
+
+        let newCurrentList = {
+            ...this.state.currentList,
+            songs: newSongs
+        }
+
+        this.setState(prevState => ({
+            currentList: newCurrentList,
+        }), () => {
+            this.db.mutationUpdateList(this.state.currentList);
+        });
+    }
+    removeSong = (index) => {
+        let newSongs = [...this.state.currentList.songs];
+        newSongs.splice(index, 1);
+
+        let newCurrentList = {
+            ...this.state.currentList,
+            songs: newSongs
+        }
+
+        this.setState(prevState => ({
+            currentList: newCurrentList
+        }), () => {
+            this.db.mutationUpdateList(this.state.currentList);
+        });
+    }
+    addRemoveSongTransaction = (index, song) => {
+        this.tps.processTransaction(new RemoveSong_Transaction(this, index, song));
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -355,6 +390,7 @@ class App extends React.Component {
                 <SongCards
                     currentList={this.state.currentList}
                     moveSongCallback={this.addMoveSongTransaction} 
+                    removeSongCallback={this.addRemoveSongTransaction}
                     showEditSongModalCallback={this.showEditSongModalCallback}
                 />
                 <Statusbar 
