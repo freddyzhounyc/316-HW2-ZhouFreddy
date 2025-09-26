@@ -55,6 +55,10 @@ export default class EditListModal extends React.Component {
         }
         this.props.confrimModalCallback(newSong);
     }
+    handleEnterKeyPressed = (event) => {
+        if (event.key === "Enter")
+            this.handleConfirmEditSong();
+    }
 
     render() {
         let classesForModal = "modal";
@@ -66,10 +70,10 @@ export default class EditListModal extends React.Component {
                 <div id='edit-song-root' className="modal-root">
                     <div id="edit-song-modal-header" className="modal-north">Edit Song</div>
                     <div id="edit-song-modal-content" className="modal-center">
-                        <div id="title-prompt" className="modal-prompt">Title:</div><input id="edit-song-modal-title-textfield" className='modal-textfield' type="text" value={this.state.titleText} onChange={this.handleTitleUpdate} />
-                        <div id="artist-prompt" className="modal-prompt">Artist:</div><input id="edit-song-modal-artist-textfield" className='modal-textfield' type="text" value={this.state.artistText} onChange={this.handleArtistUpdate} />
-                        <div id="year-prompt" className="modal-prompt">Year:</div><input id="edit-song-modal-year-textfield" className='modal-textfield' type="text" value={this.state.yearText} onChange={this.handleYearUpdate} />
-                        <div id="you-tube-id-prompt" className="modal-prompt">You Tube Id:</div><input id="edit-song-modal-youTubeId-textfield" className='modal-textfield' type="text" value={this.state.youTubeIdText} onChange={this.handleYouTubeIdUpdate} />
+                        <div id="title-prompt" className="modal-prompt">Title:</div><input id="edit-song-modal-title-textfield" className='modal-textfield' type="text" value={this.state.titleText} onChange={this.handleTitleUpdate} onKeyDown={this.handleEnterKeyPressed} />
+                        <div id="artist-prompt" className="modal-prompt">Artist:</div><input id="edit-song-modal-artist-textfield" className='modal-textfield' type="text" value={this.state.artistText} onChange={this.handleArtistUpdate} onKeyDown={this.handleEnterKeyPressed} />
+                        <div id="year-prompt" className="modal-prompt">Year:</div><input id="edit-song-modal-year-textfield" className='modal-textfield' type="text" value={this.state.yearText} onChange={this.handleYearUpdate} onKeyDown={this.handleEnterKeyPressed} />
+                        <div id="you-tube-id-prompt" className="modal-prompt">You Tube Id:</div><input id="edit-song-modal-youTubeId-textfield" className='modal-textfield' type="text" value={this.state.youTubeIdText} onChange={this.handleYouTubeIdUpdate} onKeyDown={this.handleEnterKeyPressed} />
                     </div>
                     <div className="modal-south">
                         <input type="button" id="edit-song-confirm-button" className="modal-button" value='Confirm' onClick={this.handleConfirmEditSong} />
