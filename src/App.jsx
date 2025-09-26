@@ -441,9 +441,11 @@ class App extends React.Component {
                     canUndo={canUndo}
                     canRedo={canRedo}
                     canClose={canClose} 
+                    addSongCallback={this.addCreateSongTransaction}
                     undoCallback={this.undo}
                     redoCallback={this.redo}
                     closeCallback={this.closeCurrentList}
+                    currentList={this.state.currentList}
                 />
                 <SongCards
                     currentList={this.state.currentList}
