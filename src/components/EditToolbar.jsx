@@ -1,6 +1,26 @@
 import React from "react";
 
 export default class EditToolbar extends React.Component {
+
+    handleAddSongCallback = (event) => {
+        event.target.blur();
+        let newSong = {
+            title: "Untitled",
+            artist: "???",
+            year: 2000,
+            youTubeId: "dQw4w9WgXcQ"
+        };
+        this.props.addSongCallback(this.props.currentList.songs.length, newSong);
+    }
+    handleUndoCallback = (event) => {
+        event.target.blur();
+        this.props.undoCallback();
+    }
+    handleRedoCallback = (event) => {
+        event.target.blur();
+        this.props.redoCallback();
+    }
+
     render() {
         const { canAddSong, canUndo, canRedo, canClose, 
                 undoCallback, redoCallback, closeCallback} = this.props;
@@ -19,20 +39,21 @@ export default class EditToolbar extends React.Component {
                     id='add-song-button' 
                     value="+" 
                     className={addSongClass}
+                    onClick={this.handleAddSongCallback}
                 />
                 <input 
                     type="button" 
                     id='undo-button' 
                     value="⟲" 
                     className={undoClass} 
-                    onClick={undoCallback}
+                    onClick={this.handleUndoCallback}
                 />
                 <input 
                     type="button" 
                     id='redo-button' 
                     value="⟳" 
                     className={redoClass} 
-                    onClick={redoCallback}
+                    onClick={this.handleRedoCallback}
                 />
                 <input 
                     type="button" 
@@ -44,4 +65,5 @@ export default class EditToolbar extends React.Component {
             </div>
         )
     }
+
 }

@@ -67,10 +67,12 @@ export default class SongCard extends React.Component {
     }
     handleRemoveSong = (event) => {
         event.stopPropagation();
+        event.target.blur();
         this.props.removeSongCallback(this.getItemNum() - 1, this.props.song);
     }
     handleDuplicateSong = (event) => {
         event.stopPropagation();
+        event.target.blur();
         this.props.duplicateSongCallback(this.getItemNum(), this.props.song);
     }
 
