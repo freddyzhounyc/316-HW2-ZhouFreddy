@@ -416,6 +416,24 @@ class App extends React.Component {
         newSong.title += " (Copy)";
         this.addCreateSongTransaction(index, newSong);
     }
+    handleUndoRedoViaCtrlZCtrlY = (event) => {
+        if (event.target.tagName === "INPUT")
+            return;
+        if (this.state.currentList) {
+            if (event.ctrlKey && (event.key === "z" || event.key === 'Z')) {
+                this.undo();
+            } else if (event.ctrlKey && (event.key === "y" || event.key === 'Y')) {
+                this.redo();
+            }
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", this.handleUndoRedoViaCtrlZCtrlY); // Make global to the app
+    }
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleUndoRedoViaCtrlZCtrlY);
+    }
 
     render() {
         let canAddSong = this.state.currentList !== null;
