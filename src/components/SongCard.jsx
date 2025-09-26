@@ -65,6 +65,10 @@ export default class SongCard extends React.Component {
             this.props.showEditSongModalCallback(this.props.song);
         }
     }
+    handleRemoveSong = (event) => {
+        event.stopPropagation();
+        this.props.removeSongCallback(this.getItemNum() - 1, this.props.song);
+    }
 
     getItemNum = () => {
         return this.props.id.substring("song-card-".length);
@@ -73,7 +77,7 @@ export default class SongCard extends React.Component {
     render() {
         const { song } = this.props;
         let num = this.getItemNum();
-        console.log("num: " + num);
+        // console.log("num: " + num);
         let itemClass = "song-card unselected-song-card";
         if (this.state.draggedTo) {
             itemClass = "song-card unselected-song-card song-card-dragged-to";
@@ -106,7 +110,7 @@ export default class SongCard extends React.Component {
                 <span id={"song-card-artistName-" + num}
                     className="song-card-artist">{song.artist}</span>
                 <input type="button" id={"remove-song-" + num}
-                    className="song-card-button" value="✕"/>
+                    className="song-card-button" value="✕" onClick={this.handleRemoveSong} />
             </div>
         )
     }
