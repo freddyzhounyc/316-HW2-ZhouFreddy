@@ -275,7 +275,7 @@ input {
 .modal-center {
   display: grid;
   grid-template-columns: 30% 65%;
-  grid-template-rows: 33% 33% 33%;
+  grid-template-rows: 20% 20% 20% 20% 20%;
   gap: 10px 20px;
   font-size: 48pt;
 }
@@ -304,7 +304,7 @@ span {
 }
 
 .modal-textfield {
-  font-size:28pt;
+  font-size:24pt;
 }
 
 .modal-button {

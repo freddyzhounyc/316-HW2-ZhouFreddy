@@ -7,9 +7,11 @@ import { jsTPS } from 'jstps';
 
 // OUR TRANSACTIONS
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
+import EditSong_Transaction from './transactions/EditSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.jsx';
+import EditListModal from './components/EditListModal.jsx';
 
 // THESE REACT COMPONENTS ARE IN OUR UI
 import Banner from './components/Banner.jsx';
@@ -35,6 +37,7 @@ class App extends React.Component {
         // SETUP THE INITIAL STATE
         this.state = {
             listKeyPairMarkedForDeletion : null,
+            songToEdit: null,
             currentList : null,
             sessionData : loadedSessionData
         }
@@ -274,6 +277,47 @@ class App extends React.Component {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
     }
+
+    // This function handles opening modal when user double clicks song card to perform editing
+    showEditSongModalCallback = (song) => {
+        this.setState(prevState => ({
+            listKeyPairMarkedForDeletion: prevState.listKeyPairMarkedForDeletion,
+            songToEdit: song,
+            currentList: prevState.currentList,
+            sessionData: prevState.sessionData
+        }));
+    }
+    getSongIndexFromCurrentList = (song) => {
+        let currentList = this.state.currentList;
+        if (currentList) {
+            for (let i = 0; i < currentList.length; i++) {
+                if (currentList.songs[i] === song)
+                    return i;
+            }
+        }
+    }
+    editSong = (oldSongIndex, newSong) => {
+        // Shallow update of current list to keep old list reference.
+        this.state.currentList.songs.splice(oldSongIndex, 1, newSong);
+
+        this.setState(prevState => ({
+            listKeyPairMarkedForDeletion: prevState.listKeyPairMarkedForDeletion,
+            songToEdit: null,
+            currentList: this.state.currentList,
+            sessionData: prevState.sessionData
+        }), () => {
+            this.db.mutationUpdateList(this.state.currentList);
+        });
+    }
+    addEditSongTransactionCallback = (newSong) => {
+        this.tps.processTransaction(new EditSong_Transaction(this, this.state.songToEdit, newSong));
+    }
+    closeEditSongModalViaCancel = (event) => {
+        this.setState({
+            songToEdit: null
+        });
+    }
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
@@ -303,13 +347,20 @@ class App extends React.Component {
                 />
                 <SongCards
                     currentList={this.state.currentList}
-                    moveSongCallback={this.addMoveSongTransaction} />
+                    moveSongCallback={this.addMoveSongTransaction} 
+                    showEditSongModalCallback={this.showEditSongModalCallback}
+                />
                 <Statusbar 
                     currentList={this.state.currentList} />
                 <DeleteListModal
                     listKeyPair={this.state.listKeyPairMarkedForDeletion}
                     hideDeleteListModalCallback={this.hideDeleteListModal}
                     deleteListCallback={this.deleteMarkedList}
+                />
+                <EditListModal
+                    songToEditInModal={this.state.songToEdit}
+                    confrimModalCallback={this.addEditSongTransactionCallback}
+                    closeModalCallback={this.closeEditSongModalViaCancel}
                 />
             </div>
         );
