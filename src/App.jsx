@@ -9,6 +9,7 @@ import { jsTPS } from 'jstps';
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
 import EditSong_Transaction from './transactions/EditSong_Transaction.js';
 import RemoveSong_Transaction from './transactions/RemoveSong_Transaction.js';
+import CreateSong_Transaction from './transactions/CreateSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.jsx';
@@ -359,6 +360,62 @@ class App extends React.Component {
     addRemoveSongTransaction = (index, song) => {
         this.tps.processTransaction(new RemoveSong_Transaction(this, index, song));
     }
+    addCreateSongTransaction = (index, song) => {
+        this.tps.processTransaction(new CreateSong_Transaction(this, index, song));
+    }
+
+    duplicatePlaylist = (pair) => {
+        let newKey = this.state.sessionData.nextKey;
+        let newName = pair.name + " (Copy)";
+        let newSongs = [];
+
+        let list = this.db.queryGetList(pair.key);
+        list.songs.forEach(song => {
+            newSongs.push(
+                // title: song.title,
+                // artist: song.artist,
+                // year: song.year,
+                // youTubeId: song.youTubeId
+                JSON.parse(JSON.stringify(song)) // Deep Copy!
+            )
+        });
+
+        let newList = {
+            key: newKey,
+            name: newName,
+            songs: newSongs
+        };
+
+        let newKeyNamePair = {
+            key: newKey,
+            name: newName
+        };
+        let newKeyNamePairs = [...this.state.sessionData.keyNamePairs, newKeyNamePair];
+        this.sortKeyNamePairsByName(newKeyNamePairs);
+
+        this.setState(prevState => ({
+            currentList: newList,
+            sessionData: {
+                nextKey: prevState.sessionData.nextKey + 1,
+                counter: prevState.sessionData.counter + 1,
+                keyNamePairs: newKeyNamePairs
+            }
+        }), () => {
+            this.db.mutationCreateList(newList);
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
+    }
+    duplicateSong = (index, song) => {
+        // let newSong = {
+        //     // title: song.title + " (Copy)",
+        //     // artist: song.artist,
+        //     // year: song.year,
+        //     // youTubeId: song.youTubeId
+        // };
+        let newSong = JSON.parse(JSON.stringify(song)); // Deep Copy!
+        newSong.title += " (Copy)";
+        this.addCreateSongTransaction(index, newSong);
+    }
 
     render() {
         let canAddSong = this.state.currentList !== null;
@@ -377,6 +434,7 @@ class App extends React.Component {
                     deleteListCallback={this.markListForDeletion}
                     loadListCallback={this.loadList}
                     renameListCallback={this.renameList}
+                    duplicateListCallback={this.duplicatePlaylist}
                 />
                 <EditToolbar
                     canAddSong={canAddSong}
@@ -392,6 +450,7 @@ class App extends React.Component {
                     moveSongCallback={this.addMoveSongTransaction} 
                     removeSongCallback={this.addRemoveSongTransaction}
                     showEditSongModalCallback={this.showEditSongModalCallback}
+                    duplicateSongCallback={this.duplicateSong}
                 />
                 <Statusbar 
                     currentList={this.state.currentList} />

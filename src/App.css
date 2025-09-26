@@ -120,6 +120,14 @@ body {
   border-radius: 125px;
 }
 
+.duplicate-playlist-button {
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2.2px;
+  padding-bottom: 2.2px;
+  font-size: 34px;
+}
+
 .song-card .song-card-title {
   text-decoration: none;
 }
@@ -187,7 +195,7 @@ body {
 
 .card-button, .card-button-disabled {
   font-size:18pt;
-  border-width: 0px;
+  border-width: 1px;
   float:right;
   color: black;
   cursor: pointer;
@@ -196,11 +204,18 @@ body {
 .song-card-button {
   float: right;
   font-size: 24pt;
+  cursor: pointer;
+}
+
+.duplicate-song-button {
+  font-size: 30.5px;
+  cursor: pointer;
 }
 
 .card-button:hover {
   cursor: pointer;
   color:black;
+  background-color: lightgrey;
 }
 
 .card-button-disabled {
