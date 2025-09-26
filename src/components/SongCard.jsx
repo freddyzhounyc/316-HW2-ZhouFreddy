@@ -60,6 +60,11 @@ export default class SongCard extends React.Component {
             draggedTo: false
         }));
     }
+    handleEditSong = (event) => {
+        if (event.detail === 2) {
+            this.props.showEditSongModalCallback(this.props.song);
+        }
+    }
 
     getItemNum = () => {
         return this.props.id.substring("song-card-".length);
@@ -86,6 +91,7 @@ export default class SongCard extends React.Component {
                 onDragLeave={this.handleDragLeave}
                 onDragEnd={this.handleDragEnd}
                 onDrop={this.handleDrop}
+                onClick={this.handleEditSong}
                 draggable="true"
             >
                 <span id={"song-card-number-" + num}
