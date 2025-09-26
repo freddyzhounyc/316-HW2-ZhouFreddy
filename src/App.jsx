@@ -290,20 +290,27 @@ class App extends React.Component {
     getSongIndexFromCurrentList = (song) => {
         let currentList = this.state.currentList;
         if (currentList) {
-            for (let i = 0; i < currentList.length; i++) {
-                if (currentList.songs[i] === song)
+            for (let i = 0; i < currentList.songs.length; i++) {
+                if (currentList.songs[i] === song) {
                     return i;
+                }
             }
         }
+        return -1;
     }
     editSong = (oldSongIndex, newSong) => {
         // Shallow update of current list to keep old list reference.
-        this.state.currentList.songs.splice(oldSongIndex, 1, newSong);
+        let newSongs = [...this.state.currentList.songs]
+        newSongs.splice(oldSongIndex, 1, newSong);
+        let newCurrentList = {
+            ...this.state.currentList,
+            songs: newSongs
+        }
 
         this.setState(prevState => ({
             listKeyPairMarkedForDeletion: prevState.listKeyPairMarkedForDeletion,
             songToEdit: null,
-            currentList: this.state.currentList,
+            currentList: newCurrentList,
             sessionData: prevState.sessionData
         }), () => {
             this.db.mutationUpdateList(this.state.currentList);
