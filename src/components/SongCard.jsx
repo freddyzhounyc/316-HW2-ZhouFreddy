@@ -104,20 +104,20 @@ export default class SongCard extends React.Component {
                 onClick={this.handleEditSong}
                 draggable="true"
             >
-                <span id={"song-card-number-" + num}
+                <span id={"song_card_number-" + num}
                     className="song-card-bulletNum">{num + ". "}</span>
-                <a id={"song-card-link-" + num} 
+                <a id={"song_card_link-" + num} 
                     className="song-card-title" href={"https://www.youtube.com/watch?v=" + song.youTubeId}
                     target="1">{song.title}</a>
-                <span id={"song-card-yearPublished-" + num} 
+                <span id={"song_card_yearPublished-" + num} 
                     className="song-card-year">{" (" + song.year + ")"}</span>
-                <span id={"song-card-byWord-" + num}
+                <span id={"song_card_byWord-" + num}
                     className="song-card-by">{" by "}</span>
-                <span id={"song-card-artistName-" + num}
+                <span id={"song_card_artistName-" + num}
                     className="song-card-artist">{song.artist}</span>
-                <input type="button" id={"remove-song-" + num}
+                <input type="button" id={"remove_song-" + num}
                     className="song-card-button" value="✕" onClick={this.handleRemoveSong} />
-                <input id={"duplicate-song-button-" + num}
+                <input id={"duplicate_song_button-" + num}
                     type="button" className="song-card-button duplicate-song-button"
                     value="⎘" onClick={this.handleDuplicateSong} />
             </div>

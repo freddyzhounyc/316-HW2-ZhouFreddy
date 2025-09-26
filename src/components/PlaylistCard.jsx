@@ -59,6 +59,7 @@ export default class PlaylistCard extends React.Component {
         if (this.state.editActive) {
             return (
                 <input
+                    autoFocus
                     id={"playlist-" + keyNamePair.name}
                     className='playlist-card'
                     type='text'

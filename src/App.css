@@ -112,6 +112,16 @@ body {
   float:left;
 }
 
+.toolbar-button {
+  font-size:36pt;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  box-shadow: 2px 4px #888888;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .playlist-card, .selected-playlist-card, .unselected-playlist-card, 
 .song-card, .unselected-song-card {
   font-size: 24pt;
